@@ -167,7 +167,7 @@ else:
         with st.container(border=True):
             st.markdown("### ⚖️ Settlements")
             if not debts_data:
-                st.success("No debts detected. You're all square!")
+                st.info("No debts detected. You're all square!")
                 debts_df = pd.DataFrame(columns=["debtor", "creditor", "amount"])
             else:
                 debts_df = pd.DataFrame(debts_data).sort_values(by="amount", ascending=False)
