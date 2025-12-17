@@ -52,14 +52,14 @@ Open a terminal and run:
 ```bash
 uvicorn backend.main:app --reload
 ```
-The API will be available at `http://localhost:8000`. You can view the API documentation at `http://localhost:8000/docs`.
+The API will be available at `http://localhost:8000`. You can view the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs).
 
 ### 2. Start the Frontend Interface
 Open a new terminal and run:
 ```bash
 streamlit run frontend/app.py
 ```
-The web application will open automatically in your default browser at `http://localhost:8501`.
+The web application will open automatically in your default browser at [http://localhost:8501](http://localhost:8501).
 
 ## 📂 Project Structure
 
