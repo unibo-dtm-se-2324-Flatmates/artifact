@@ -19,32 +19,6 @@ from utils import (
 st.set_page_config(page_title="Expenses", page_icon="💸", layout="wide")
 render_sidebar()
 
-st.markdown(
-    """
-    <style>
-    .reimburse-btn button {
-        background: linear-gradient(135deg, #5a3fff 0%, #4f8ef7 100%);
-        color: #ffffff !important;
-        border: none;
-        border-radius: 12px;
-        padding: 0.6rem 1.4rem;
-        font-weight: 600;
-        box-shadow: 0 10px 18px rgba(79, 142, 247, 0.25);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .reimburse-btn button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 12px 22px rgba(90, 63, 255, 0.25);
-    }
-    .reimburse-btn button:focus-visible {
-        outline: 3px solid rgba(79, 142, 247, 0.45);
-        outline-offset: 2px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 
 def _format_currency(value: float) -> str:
     return f"${value:,.2f}"
@@ -214,77 +188,76 @@ else:
                 )
 
             st.divider()
-            st.markdown("**Record a Reimbursement**")
-            if debts_df.empty:
-                st.info("No outstanding settlements available to reimburse.")
-                st.session_state["_reset_reimbursement_state"] = True
-            else:
-                debt_records = debts_df.to_dict("records")
-                option_labels = [
-                    f"{record['debtor']} → {record['creditor']} ({_format_currency(record['amount'])})"
-                    for record in debt_records
-                ]
-                if not st.session_state["_show_reimbursement_form"]:
-                    st.markdown('<div class="reimburse-btn">', unsafe_allow_html=True)
-                    if st.button("Record reimbursement", key="open_reimbursement"):
-                        st.session_state["_show_reimbursement_form"] = True
-                        st.session_state["_reimbursement_selection_idx"] = 0
-                        st.session_state["_reimbursement_note"] = ""
-                        st.session_state["_open_reimbursement_now"] = True
-                        _rerun_page()
-                    st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.markdown("#### Record a Reimbursement")
+                if debts_df.empty:
+                    st.info("No outstanding settlements available to reimburse.")
+                    st.session_state["_reset_reimbursement_state"] = True
+                else:
+                    debt_records = debts_df.to_dict("records")
+                    option_labels = [
+                        f"{record['debtor']} → {record['creditor']} ({_format_currency(record['amount'])})"
+                        for record in debt_records
+                    ]
+                    if not st.session_state["_show_reimbursement_form"]:
+                        if st.button("Record reimbursement", key="open_reimbursement"):
+                            st.session_state["_show_reimbursement_form"] = True
+                            st.session_state["_reimbursement_selection_idx"] = 0
+                            st.session_state["_reimbursement_note"] = ""
+                            st.session_state["_open_reimbursement_now"] = True
+                            _rerun_page()
 
-                if st.session_state["_show_reimbursement_form"]:
-                    max_index = max(len(debt_records) - 1, 0)
-                    default_index = min(st.session_state["_reimbursement_selection_idx"], max_index)
+                    if st.session_state["_show_reimbursement_form"]:
+                        max_index = max(len(debt_records) - 1, 0)
+                        default_index = min(st.session_state["_reimbursement_selection_idx"], max_index)
 
-                    selected_index = st.selectbox(
-                        "Choose a settlement to reimburse",
-                        list(range(len(debt_records))),
-                        index=default_index,
-                        format_func=lambda idx: option_labels[idx],
-                    )
-                    st.session_state["_reimbursement_selection_idx"] = selected_index
+                        selected_index = st.selectbox(
+                            "Choose a settlement to reimburse",
+                            list(range(len(debt_records))),
+                            index=default_index,
+                            format_func=lambda idx: option_labels[idx],
+                        )
+                        st.session_state["_reimbursement_selection_idx"] = selected_index
 
-                    chosen_debt = debt_records[selected_index]
-                    amount_due = float(chosen_debt["amount"])
-                    st.info(
-                        f"{chosen_debt['debtor']} will reimburse {chosen_debt['creditor']} "
-                        f"{_format_currency(amount_due)}"
-                    )
+                        chosen_debt = debt_records[selected_index]
+                        amount_due = float(chosen_debt["amount"])
+                        st.info(
+                            f"{chosen_debt['debtor']} will reimburse {chosen_debt['creditor']} "
+                            f"{_format_currency(amount_due)}"
+                        )
 
-                    note_input = st.text_input(
-                        "Note (optional)",
-                        key="_reimbursement_note",
-                        placeholder="e.g., Bank transfer",
-                    )
+                        note_input = st.text_input(
+                            "Note (optional)",
+                            key="_reimbursement_note",
+                            placeholder="e.g., Bank transfer",
+                        )
 
-                    confirm_col, cancel_col = st.columns(2)
-                    if confirm_col.button(
-                        "Confirm reimbursement", type="primary", key="confirm_reimbursement"
-                    ):
-                        note_value = note_input.strip()
-                        payload = {
-                            "from_person": chosen_debt["debtor"],
-                            "to_person": chosen_debt["creditor"],
-                            "amount": amount_due,
-                            "note": note_value or None,
-                        }
-                        try:
-                            add_reimbursement(payload)
-                            st.session_state["_reimbursement_notice"] = (
-                                "Reimbursement recorded. Debts updated."
-                            )
+                        confirm_col, cancel_col = st.columns(2)
+                        if confirm_col.button(
+                            "Confirm reimbursement", type="primary", key="confirm_reimbursement"
+                        ):
+                            note_value = note_input.strip()
+                            payload = {
+                                "from_person": chosen_debt["debtor"],
+                                "to_person": chosen_debt["creditor"],
+                                "amount": amount_due,
+                                "note": note_value or None,
+                            }
+                            try:
+                                add_reimbursement(payload)
+                                st.session_state["_reimbursement_notice"] = (
+                                    "Reimbursement recorded. Debts updated."
+                                )
+                                st.session_state["_reset_reimbursement_state"] = True
+                                st.session_state["_active_expense_tab"] = "debt"
+                                _rerun_page()
+                            except Exception:
+                                st.error("Unable to record the reimbursement. Please retry in a moment.")
+
+                        if cancel_col.button("Cancel", key="cancel_reimbursement"):
                             st.session_state["_reset_reimbursement_state"] = True
                             st.session_state["_active_expense_tab"] = "debt"
                             _rerun_page()
-                        except Exception:
-                            st.error("Unable to record the reimbursement. Please retry in a moment.")
-
-                    if cancel_col.button("Cancel", key="cancel_reimbursement"):
-                        st.session_state["_reset_reimbursement_state"] = True
-                        st.session_state["_active_expense_tab"] = "debt"
-                        _rerun_page()
 
     st.divider()
 
