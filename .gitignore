@@ -15,3 +15,8 @@ env/
 
 # VS Code settings
 .vscode/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
