@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 from typing import List, Optional
-from datetime import date
+from datetime import date, time
 
 class Event(BaseModel):
     id: Optional[int] = None
     title: str
     date: date
+    start_time: Optional[time] = None
+    end_time: Optional[time] = None
     description: Optional[str] = None
-    assigned_to: Optional[str] = None
+    assigned_to: List[str] = []
 
 class ShoppingItem(BaseModel):
     id: Optional[int] = None
