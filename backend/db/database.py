@@ -370,7 +370,7 @@ class Database:
                 )
             )
         return reimbursements
-    
+
     def clear_all_data(self) -> None:
         """Remove all persisted data, including house settings."""
         cursor = self.conn.cursor()
