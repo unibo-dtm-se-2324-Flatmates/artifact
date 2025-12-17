@@ -31,5 +31,5 @@ class Debt(BaseModel):
     amount: float
 
 class HouseSettings(BaseModel):
-    name: str = "My Flat"
-    flatmates: List[str] = ["Flatmate 1", "Flatmate 2"]
+    name: str = ""
+    flatmates: List[str] = []
