@@ -1,6 +1,32 @@
 import requests
+import streamlit as st
 
 API_URL = "http://localhost:8000"
+
+def render_sidebar():
+    with st.sidebar:
+        st.title("🏠 Flatmate Manager")
+        
+        st.markdown("---")
+        
+        # Custom Navigation
+        st.subheader("Navigation")
+        st.page_link("app.py", label="Home", icon="🏠")
+        st.page_link("pages/0_Settings.py", label="Settings", icon="⚙️")
+        st.page_link("pages/1_Calendar.py", label="Calendar", icon="📅")
+        st.page_link("pages/2_Shopping_List.py", label="Shopping List", icon="🛒")
+        st.page_link("pages/3_Expenses.py", label="Expenses", icon="💸")
+        
+        st.markdown("---")
+
+    # Hide default navigation
+    st.markdown("""
+        <style>
+            [data-testid="stSidebarNav"] {
+                display: none;
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
 def get_events():
     try:
