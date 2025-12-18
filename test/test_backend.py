@@ -26,6 +26,7 @@ def test_db(tmp_path, monkeypatch):
         "backend.routers.shopping",
         "backend.routers.expenses",
         "backend.routers.house",
+        "backend.routers.auth",
     ]
     for target in targets:
         monkeypatch.setattr(f"{target}.db", db_instance)
@@ -110,6 +111,49 @@ def test_house_settings(client, auth_header):
     assert returned["name"] == "My House"
     assert returned["flatmates"] == ["alice"]
     assert returned["join_code"] is not None
+
+
+def test_auth_register_and_login(client, test_db):
+    register_resp = client.post(
+        "/auth/register",
+        json={"username": "newuser", "password": "pw", "house_name": "Auth House"},
+    )
+    assert register_resp.status_code == 200
+    payload = register_resp.json()
+    token = payload["token"]
+    assert token
+    assert payload["house"]["join_code"] == str(payload["house"]["id"])
+
+    login_resp = client.post(
+        "/auth/login",
+        json={"username": "newuser", "password": "pw"},
+    )
+    assert login_resp.status_code == 200
+    login_payload = login_resp.json()
+    assert login_payload["token"]
+
+    me_resp = client.get("/auth/me", headers={"Authorization": f"Bearer {login_payload['token']}"})
+    assert me_resp.status_code == 200
+    assert me_resp.json()["user"]["username"] == "newuser"
+
+
+def test_auth_join_existing_house(client, test_db):
+    # Create first user + house
+    first = client.post(
+        "/auth/register",
+        json={"username": "host", "password": "pw", "house_name": "Shared"},
+    )
+    assert first.status_code == 200
+    join_code = first.json()["house"]["join_code"]
+
+    # Join existing house via code
+    second = client.post(
+        "/auth/register",
+        json={"username": "guest", "password": "pw", "house_code": join_code},
+    )
+    assert second.status_code == 200
+    assert second.json()["house"]["id"] == first.json()["house"]["id"]
+    assert "guest" in second.json()["house"]["flatmates"]
 
 
 def test_expenses_and_debts_flow(client, auth_header):
