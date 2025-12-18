@@ -73,7 +73,7 @@ streamlit run frontend/app.py
 ```
 The web application will open automatically in your default browser at [http://localhost:8501](http://localhost:8501).
 
-> Instead for the remote usage, the application is hosted in this link: [**Flatmates App**](https://flatmates.streamlit.app/)
+> Instead for the **remote usage**, the application is hosted in this link: [**Flatmates App**](https://flatmates.streamlit.app/)
 
 ## 📂 Project Structure
 
