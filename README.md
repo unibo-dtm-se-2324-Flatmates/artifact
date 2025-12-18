@@ -23,8 +23,8 @@ A comprehensive web application designed to simplify shared living by centralizi
 
 ## ☁️ Deployment
 
-- **Frontend**: Streamlit Community Cloud hosts the Streamlit app.
-- **Backend**: Railway runs the FastAPI service and database.
+- **Frontend**: Streamlit Community Cloud hosts the Streamlit app. The app reads the backend base URL from the `API_URL` Streamlit secret.
+- **Backend**: Railway builds and runs the FastAPI service with Uvicorn, and the `API_URL` in Streamlit is linked to the Railway domain. The SQLite file lives under `backend/db/flatmate.db`.
 
 ## 🚀 Getting Started
 
