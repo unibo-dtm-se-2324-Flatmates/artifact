@@ -11,7 +11,7 @@ class DummyResponse:
 
 
 def test_get_events_success(monkeypatch):
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         assert url == f"{utils.API_URL}/calendar/"
         return DummyResponse(200, [{"title": "Hello"}])
 
@@ -20,7 +20,7 @@ def test_get_events_success(monkeypatch):
 
 
 def test_get_events_failure_returns_empty(monkeypatch):
-    def boom(url):
+    def boom(url, **kwargs):
         raise RuntimeError("network down")
 
     monkeypatch.setattr(utils.requests, "get", boom)
@@ -30,11 +30,11 @@ def test_get_events_failure_returns_empty(monkeypatch):
 def test_shopping_list_and_delete(monkeypatch):
     captured = {}
 
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         assert url == f"{utils.API_URL}/shopping/"
         return DummyResponse(200, [{"id": 1, "name": "Eggs"}])
 
-    def fake_delete(url):
+    def fake_delete(url, **kwargs):
         captured["url"] = url
         return DummyResponse(200, {"message": "Item removed"})
 
@@ -49,11 +49,11 @@ def test_shopping_list_and_delete(monkeypatch):
 def test_create_and_update_event_calls(monkeypatch):
     captured = {}
 
-    def fake_post(url, json):
+    def fake_post(url, json, **kwargs):
         captured["post"] = (url, json)
         return DummyResponse(200, {"ok": True})
 
-    def fake_put(url, json):
+    def fake_put(url, json, **kwargs):
         captured["put"] = (url, json)
         return DummyResponse(200, {"ok": True})
 
@@ -68,14 +68,14 @@ def test_create_and_update_event_calls(monkeypatch):
 
 
 def test_expenses_and_debts_helpers(monkeypatch):
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         if url.endswith("/expenses/"):
             return DummyResponse(200, [{"title": "Lunch"}])
         if url.endswith("/expenses/debts"):
             return DummyResponse(200, [{"debtor": "Bob", "amount": 10}])
         return DummyResponse(200, [])
 
-    def fake_post(url, json):
+    def fake_post(url, json, **kwargs):
         return DummyResponse(200, {"id": 9})
 
     monkeypatch.setattr(utils.requests, "get", fake_get)
@@ -91,10 +91,10 @@ def test_expenses_and_debts_helpers(monkeypatch):
 def test_house_settings_helpers(monkeypatch):
     captured = {}
 
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         return DummyResponse(200, {"name": "Test", "flatmates": ["A"]})
 
-    def fake_post(url, json):
+    def fake_post(url, json, **kwargs):
         captured["url"] = url
         captured["payload"] = json
         return DummyResponse(200, json)
@@ -112,7 +112,7 @@ def test_house_settings_helpers(monkeypatch):
 def test_reset_house_data(monkeypatch):
     captured = {}
 
-    def fake_delete(url):
+    def fake_delete(url, **kwargs):
         captured["url"] = url
         return DummyResponse(200, {"message": "House and data reset"})
 
@@ -123,7 +123,7 @@ def test_reset_house_data(monkeypatch):
 
 
 def test_reset_house_data_failure(monkeypatch):
-    def boom(url):
+    def boom(url, **kwargs):
         raise RuntimeError("network down")
 
     monkeypatch.setattr(utils.requests, "delete", boom)
@@ -132,7 +132,7 @@ def test_reset_house_data_failure(monkeypatch):
 
 
 def test_get_reimbursements_handles_failure(monkeypatch):
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         raise RuntimeError("oops")
 
     monkeypatch.setattr(utils.requests, "get", fake_get)
@@ -140,7 +140,7 @@ def test_get_reimbursements_handles_failure(monkeypatch):
 
 
 def test_get_reimbursements_success(monkeypatch):
-    def fake_get(url):
+    def fake_get(url, **kwargs):
         assert url == f"{utils.API_URL}/expenses/reimbursements"
         return DummyResponse(200, [{"id": 1, "amount": 10}])
 
