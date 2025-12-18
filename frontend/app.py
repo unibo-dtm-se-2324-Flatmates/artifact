@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import render_sidebar
+from utils import fetch_profile, login_user, register_user, render_sidebar
 
 st.set_page_config(
     page_title="Flatmate Manager App",
@@ -8,6 +8,61 @@ st.set_page_config(
 )
 
 render_sidebar()
+
+# --- Auth Gate ---
+if "auth_token" not in st.session_state:
+    st.title("Welcome to the Flatmate Manager app! 🏠")
+    st.markdown("Login or create an account to continue.")
+
+    login_tab, register_tab = st.tabs(["Login", "Register"])
+
+    with login_tab:
+        with st.form("login_form"):
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+            submitted = st.form_submit_button("Login", type="primary")
+
+        if submitted:
+            result = login_user(username, password)
+            if result:
+                st.session_state["auth_token"] = result.get("token")
+                st.session_state["profile"] = result
+                st.success("Logged in successfully")
+                st.rerun()
+            else:
+                st.error("Invalid credentials")
+
+    with register_tab:
+        with st.form("register_form"):
+            username_r = st.text_input("Username", key="reg_user")
+            password_r = st.text_input("Password", type="password", key="reg_pass")
+            house_choice = st.radio("House", ["Create new", "Join existing"], horizontal=True)
+            house_name = None
+            house_code = None
+            if house_choice == "Create new":
+                house_name = st.text_input("House name", placeholder="e.g. Via Roma 42")
+            else:
+                house_code = st.text_input("House code", placeholder="Enter the house ID")
+
+            submitted_r = st.form_submit_button("Create account", type="primary")
+
+        if submitted_r:
+            result = register_user(username_r, password_r, house_name=house_name, house_code=house_code)
+            if result:
+                st.session_state["auth_token"] = result.get("token")
+                st.session_state["profile"] = result
+                st.success("Account created and signed in")
+                st.rerun()
+            else:
+                st.error("Registration failed. Try a different username or code.")
+
+    st.stop()
+
+# Refresh profile if missing
+if "profile" not in st.session_state:
+    profile = fetch_profile(st.session_state.get("auth_token"))
+    if profile:
+        st.session_state["profile"] = profile
 
 st.markdown("""
     <style>
