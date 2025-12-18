@@ -27,8 +27,9 @@ def register(request: RegisterRequest):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already exists")
 
     house_id: Optional[int] = None
-    if request.house_code:
-        house = db.get_house_by_code(request.house_code)
+    house_code = (request.house_code or "").strip()
+    if house_code:
+        house = db.get_house_by_code(house_code)
         if not house:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="House not found")
         house_id = house["id"]
