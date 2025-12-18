@@ -28,7 +28,9 @@ with st.container(border=True):
     st.subheader("🏡 House")
     st.markdown(f"**Name:** {house_name}")
     if join_code:
+        st.markdown("**Invite code**")
         st.code(join_code, language="text")
+        st.caption("Share this code with flatmates so they can join your house.")
 
     st.divider()
     st.subheader("👥 Flatmates")
@@ -37,6 +39,7 @@ with st.container(border=True):
         for idx, mate in enumerate(current_flatmates):
             with cols[idx % 3]:
                 st.info(f"**{mate}**", icon="👤")
+        st.caption("Flatmates are registered users. Share the invite code so others can join; users who leave should log out.")
     else:
         st.info("No flatmates found yet. Share the code to invite others.")
 
