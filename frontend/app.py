@@ -2,7 +2,7 @@ import streamlit as st
 from utils import fetch_profile, login_user, register_user, render_sidebar
 
 st.set_page_config(
-    page_title="Flatmate Manager App",
+    page_title="Flatmates App",
     page_icon="🏠",
     layout="wide"
 )
@@ -11,7 +11,7 @@ render_sidebar()
 
 # --- Auth Gate ---
 if "auth_token" not in st.session_state:
-    st.title("Welcome to the Flatmate Manager app! 🏠")
+    st.title("Welcome to the Flatmates app! 🏠")
     st.markdown("Login or create an account to continue.")
 
     login_tab, register_tab = st.tabs(["Login", "Register"])
@@ -111,7 +111,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("Welcome to the Flatmate Manager app! 🏠")
+st.title("Welcome to the Flatmates app! 🏠")
 st.markdown("Manage your shared living space with ease.")
 
 col1, col2 = st.columns(2)

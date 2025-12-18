@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from .routers import auth, calendar, expenses, house, shopping
 
-app = FastAPI(title="Flatmate App API")
+app = FastAPI(title="Flatmates App API")
 
 app.include_router(auth.router)
 app.include_router(calendar.router)
@@ -17,4 +17,4 @@ def read_root():
     Returns:
         dict: Welcome payload with a static message.
     """
-    return {"message": "Welcome to the Flatmate App API"}
+    return {"message": "Welcome to the Flatmates App API"}
