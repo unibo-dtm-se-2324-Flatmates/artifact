@@ -1,4 +1,4 @@
-# Flatmate Manager App 🏠
+# Flatmates App 🏠
 
 ## 📝 Description
 
@@ -24,7 +24,7 @@ A comprehensive web application designed to simplify shared living by centralizi
 ## ☁️ Deployment
 
 - **Frontend**: Streamlit Community Cloud hosts the Streamlit app. The app reads the backend base URL from the `API_URL` Streamlit secret.
-- **Backend**: Railway builds and runs the FastAPI service with Uvicorn, and the `API_URL` in Streamlit is linked to the Railway domain. The SQLite file lives under `backend/db/flatmate.db`.
+- **Backend**: Railway builds and runs the FastAPI service with Uvicorn, and the `API_URL` in Streamlit is linked to the Railway domain. The SQLite file lives under `backend/db/flatmates.db`.
 
 ## 🚀 Getting Started
 
@@ -64,7 +64,7 @@ uvicorn backend.main:app --reload
 ```
 The API will be available at `http://localhost:8000`. You can view the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs).
 
-The SQLite database is created automatically at first run in `backend/db/flatmate.db`.
+The SQLite database is created automatically at first run in `backend/db/flatmates.db`.
 
 ### 2. Start the Frontend Interface
 Open a new terminal and run:
@@ -78,7 +78,7 @@ The web application will open automatically in your default browser at [http://l
 ## 📂 Project Structure
 
 ```
-Flatmate-Manager-TEST/
+artifact/
 ├── .gitignore
 ├── LICENSE
 ├── MANIFEST.in

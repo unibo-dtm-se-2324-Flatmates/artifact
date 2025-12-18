@@ -52,7 +52,7 @@ def auth_header(test_db):
 def test_root_returns_welcome(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to the Flatmate App API"}
+    assert response.json() == {"message": "Welcome to the Flatmates App API"}
 
 
 def test_calendar_flow(client, auth_header):

@@ -12,7 +12,7 @@ from ..models import Event, Expense, HouseSettings, Reimbursement, ShoppingItem,
 class Database:
     def __init__(self):
         """Initialize the SQLite connection and ensure tables exist."""
-        self.db_path = Path(__file__).resolve().parent / "flatmate.db"
+        self.db_path = Path(__file__).resolve().parent / "flatmates.db"
         self.conn = sqlite3.connect(self.db_path, check_same_thread=False)
         self.conn.row_factory = sqlite3.Row
         self._ensure_tables()

@@ -91,7 +91,7 @@ def require_auth() -> Dict[str, Any]:
 def render_sidebar():
     """Render the Streamlit sidebar navigation and styling."""
     with st.sidebar:
-        st.title("🏠 Flatmate Manager")
+        st.title("🏠 Flatmates")
 
         profile = st.session_state.get("profile") or {}
         user = profile.get("user", {}) if isinstance(profile, dict) else {}
