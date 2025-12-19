@@ -91,7 +91,7 @@ def require_auth() -> Dict[str, Any]:
 def render_sidebar():
     """Render the Streamlit sidebar navigation and styling."""
 
-    app_version = "v1.1.0" 
+    app_version = "v1.1.0"
 
     with st.sidebar:
         st.title("🏠 Flatmates App")
