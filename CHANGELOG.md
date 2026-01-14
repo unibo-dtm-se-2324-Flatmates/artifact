@@ -87,7 +87,7 @@ All notable changes to the **Flatmates App** project are documented in this file
 - **Feature**: Added user login and registration ([#20](https://github.com/unibo-dtm-se-2324-Flatmates/artifact/pull/20))
 - Documentation and versioning update
 
-**PRs included**: #17-#23
+**PRs included**: #17-#24
 
 <br>
 <br>
@@ -115,6 +115,7 @@ All notable changes to the **Flatmates App** project are documented in this file
 - **[#19](https://github.com/unibo-dtm-se-2324-Flatmates/artifact/pull/19)** - Fix failing frontend tests
 - **[#21](https://github.com/unibo-dtm-se-2324-Flatmates/artifact/pull/21)** - Change pointer backend API url
 - **[#22](https://github.com/unibo-dtm-se-2324-Flatmates/artifact/pull/22)** - Change app name
+- **[#24](https://github.com/unibo-dtm-se-2324-Flatmates/artifact/pull/24)** - Correct years in CHANGELOG.md
 
 ## INFRA
 
